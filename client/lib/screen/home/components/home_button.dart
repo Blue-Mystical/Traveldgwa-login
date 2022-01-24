@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:home_and_login/constants.dart';
+import 'package:se_app2/constants.dart';
 
 class HomeButton extends StatelessWidget {
   const HomeButton({
-    Key? key,
-    required this.icon,
-    required this.text,
-    required this.route,
+    Key key,
+    this.icon,
+    this.text,
+    this.route,
   }) : super(key: key);
 
   final String icon;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:home_and_login/constants.dart';
+import 'package:se_app2/constants.dart';
 import 'package:flutter/gestures.dart';
+import 'package:http/http.dart' as http;
 
 class Body extends StatelessWidget {
   @override
@@ -24,6 +25,30 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
+    Future save() async {
+      var res = await http.post("http://10.0.2.2:8080/signin",
+          headers: <String, String>{
+            'Context-Type': 'application/json;charSet=UTF-8'
+          },
+          body: <String, String>{
+            "email": emailController.text,
+            "password": passwordController.text,
+          });
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        print('success');
+        Navigator.pushNamed(
+          context, '/home',
+        );
+      }
+      else {
+        print('failure');
+      }
+    }
+
     return Stack(
       children: <Widget>[
         Container(
@@ -45,8 +70,8 @@ class LoginForm extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20.0),
-              TextField(
+              SizedBox(height: size.height * 0.02,),
+              TextFormField(
                 decoration: InputDecoration(
                     labelText: 'อีเมลหรือหมายเลขโทรศัพท์',
                     labelStyle: TextStyle(
@@ -54,13 +79,12 @@ class LoginForm extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: primaryColor,
                     ),
-                    // hintText: 'EMAIL',
-                    // hintStyle: ,
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: primaryColor))),
+                controller: emailController,
               ),
-              SizedBox(height: 10.0),
-              TextField(
+              SizedBox(height: size.height * 0.01,),
+              TextFormField(
                 decoration: InputDecoration(
                     labelText: 'รหัสผ่าน',
                     labelStyle: TextStyle(
@@ -68,22 +92,16 @@ class LoginForm extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: primaryColor,
                     ),
-                    // prefixIcon: Align(
-                    //   widthFactor: 1.0,
-                    //   heightFactor: 1.0,
-                    //   child: Icon(
-                    //     Icons.person,
-                    //   ),
-                    // ),
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: primaryColor))),
+                controller: passwordController,
                 obscureText: true,
               ),
-              SizedBox(height: 5.0),
+              SizedBox(height: size.height * 0.006,),
               Container(
                 child: GestureDetector(
                 onTap: () {
-                  print('change page to request password');
+                  Navigator.pushNamed(context, '/password',);
                 },
                   child: Align(
                     alignment: Alignment.centerRight,
@@ -96,30 +114,34 @@ class LoginForm extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 70.0),
-              Container(
-                  padding: EdgeInsets.only(
-                    left: 10,
-                    right: 10,
-                  ),
-                  height: 50.0,
-                  child: Material(
-                    borderRadius: BorderRadius.circular(30.0),
-                    color: primaryColor,
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Center(
-                        child: Text(
-                          'เข้าสู่ระบบ',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Montserrat'),
-                        ),
-                      ),
-                    ),
-                  )
+              SizedBox(height: size.height * 0.07,),
+               GestureDetector(
+              onTap: () {
+                save();
+              },
+                 child: Container(
+                   padding: EdgeInsets.only(
+                     left: 10,
+                     right: 10,
+                   ),
+                   height: 50.0,
+                   child: Material(
+                     borderRadius: BorderRadius.circular(30.0),
+                     color: primaryColor,
+
+                     child: Center(
+                       child: Text(
+                         'เข้าสู่ระบบ',
+                         style: TextStyle(
+                             color: Colors.white,
+                             fontWeight: FontWeight.bold,
+                             fontFamily: 'Montserrat'),
+                       ),
+                     ),
+                   ),
+                 ),
               ),
+
               SizedBox(height: 20.0),
               Container(
                 child: Align(
@@ -172,7 +194,7 @@ class LoginForm extends StatelessWidget {
                         style:  TextStyle(color: Colors.black),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            print('ลงทะเบียน');
+                            Navigator.pushNamed(context, '/register',);
                           }),
                     TextSpan(text: 'เข้าใช้งานด้วยอีเมลและหมายเลขโทรศัพท์'),
                   ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:home_and_login/constants.dart';
+import 'package:se_app2/constants.dart';
 
 class LoginRegisHeader extends StatelessWidget {
   @override

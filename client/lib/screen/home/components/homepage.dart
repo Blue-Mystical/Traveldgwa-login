@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:home_and_login/constants.dart';
-import 'package:home_and_login/screen/home/components/home_button.dart';
+import 'package:se_app2/constants.dart';
+import 'package:se_app2/screen/home/components/home_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class Home extends StatelessWidget {
@@ -24,14 +24,14 @@ class Home extends StatelessWidget {
         ),
         Column(
           children: <Widget>[
-            SizedBox(height: 60),
+            SizedBox(height: size.height * 0.05,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Align(
                     alignment: Alignment.center,
                     child: Image.asset('assets/images/logo.png',
-                        width: 80.0, height: 80.0),
+                        width: 80.0, height: size.height * 0.08,),
                   ),
                 SizedBox(width: 1),
                 Text("TravelDGwa",
@@ -55,7 +55,7 @@ class Home extends StatelessWidget {
                   ),
               ],
             ),
-            SizedBox(height: 30),
+            SizedBox(height: size.height * 0.02),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -64,7 +64,7 @@ class Home extends StatelessWidget {
                 HomeButton(icon: 'assets/icons/02.png', text: 'เที่ยวบิน', route: '/findhotel'),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: size.height * 0.016),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -75,7 +75,7 @@ class Home extends StatelessWidget {
                 HomeButton(icon: 'assets/icons/05.png', text: 'แผนที่', route: '/findhotel'),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: size.height * 0.016),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -86,7 +86,7 @@ class Home extends StatelessWidget {
                 HomeButton(icon: 'assets/icons/08.png', text: 'ร้านอาหาร', route: '/findhotel'),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: size.height * 0.02),
 
             Container(
               width: double.infinity,
@@ -115,7 +115,7 @@ class Home extends StatelessWidget {
 
             CarouselSlider(
               options: CarouselOptions(
-                height: 140.0,
+                height: size.height * 0.16,
                 viewportFraction: 1.0,
                 enableInfiniteScroll: true,
                 autoPlay: true,
@@ -164,7 +164,7 @@ class Home extends StatelessWidget {
 
             CarouselSlider(
               options: CarouselOptions(
-                height: 90.0,
+                height: size.height * 0.12,
                 viewportFraction: 0.35,
                 enableInfiniteScroll: true,
                 autoPlay: true,

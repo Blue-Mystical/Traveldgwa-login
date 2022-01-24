@@ -2,30 +2,13 @@ const express  = require('express')
 const User = require('../models/user_model')
 const shuttle_partner = require('../models/shuttle_partner_model')
 const shuttle_invoice = require('../models/shuttle_invoice_model')
+const passport = require('passport')
 
 const router = express.Router()
 
 router.get('/', (req,res) => {
     console.log('Hello')
 })
-
-// router.post('/register_shuttlepartner',(req,res) => { 
-//     print('register_shuttlepartner');
-//     shuttle_partner.insertOne(
-//         { username: req.body.username,
-//           display_name: req.body.display_name,
-//           car_brand: req.body.car_brand,
-//           car_registration: req.body.car_registration,
-//           phone: req.body.phone,
-//           email: req.body.email,
-//         }
-//      )
-
-// })
-
-// router.post('/check',(req,res) => {
-//     print('check');
-// })
 
 router.post('/signup',(req,res) => {
     User.findOne({email:req.body.email,password:req.body.password} , (err,user) => {
@@ -36,20 +19,21 @@ router.post('/signup',(req,res) => {
             if(user == null){
                 const user = User({
                     email:req.body.email,
-                    password:req.body.password
+                    phone: req.body.phone,
                 })
-                user.save()
-                .then((err) => {
-                    if(err){
+                console.log(user)
+                User.register(user, req.body.password, function(err, user) {
+                    if (err) {
                         console.log(err)
-                        res.json(err)
-                    } else {
-                        console.log(user)
+                        return res.status(401).json(err)
+                    } 
+                    passport.authenticate('local')(req, res, function() {
                         res.json(user)
-                    }
+                        return res.status(200).json()
+                    })
                 })
             } else {
-                res.json({
+                return res.status(401).json({
                     'message' : 'email is not avaiable'
                 })
             }
@@ -58,16 +42,19 @@ router.post('/signup',(req,res) => {
     })
 })
 
-router.post('/signin',(req,res) => {
-    User.findOne({email:req.body.email,password:req.body.password} , (err,user) => {
-        if(err){
-            console.log(err)
-            res.json(err)
+router.post('/signin',(req,res,next) => {
+    passport.authenticate('local', function(err, user, info) {
+        if (err) return res.status(401).json(err)
+        if (user) {
+            // const token = user.generateJwt();
+            return res.status(200).json({
+                // "token": token
+            });
         } else {
-            res.json(user)
-        }   
-    })
-
+            console.log('user not found or wrong password')
+            return res.status(401).json(info);
+        }
+    })(req, res, next)
 })
 
 //shuttle

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:home_and_login/constants.dart';
+import 'package:se_app2/constants.dart';
 import 'package:flutter/gestures.dart';
 
 class PasswordRecoveryForm extends StatelessWidget {
@@ -17,16 +17,38 @@ class PasswordRecoveryForm extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
-                child: Center(
-                  child: Text("ลืมรหัสผ่าน",
-                    style: TextStyle(
-                      color: primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                child: Stack(
+                  children: [
+                    Container(
+                      child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: primaryColor,
+                          size: 24.0,
+                          semanticLabel: 'Text to announce in accessibility modes',
+                        ),
+                      ),
+                      alignment: Alignment.topLeft,
+
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text("ลืมรหัสผ่าน",
+                        style: TextStyle(
+                          color: primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+
+                  ],
                 ),
+
               ),
               SizedBox(height: 20.0),
               TextField(
