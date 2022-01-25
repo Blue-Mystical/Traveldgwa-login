@@ -3,24 +3,18 @@ import 'package:se_app2/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 
-class Body extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+class LoginForm extends StatefulWidget {
+  const LoginForm({Key key}) : super(key: key);
 
-    return Container(
-      height: size.height,
-      width: double.infinity,
-      color: secondaryColor,
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[],
-      )
-    );
-  }
+  @override
+  _LoginFormState createState() => _LoginFormState();
 }
 
-class LoginForm extends StatelessWidget {
+class _LoginFormState extends State<LoginForm>  {
+  GlobalKey<FormState> _formKey = GlobalKey();
+
+  var _loginFailed = false;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -45,11 +39,16 @@ class LoginForm extends StatelessWidget {
         );
       }
       else {
+        setState((){
+          _loginFailed = true;
+        });
         print('failure');
       }
     }
 
-    return Stack(
+    return Form(
+      key: _formKey,
+      child: Stack(
       children: <Widget>[
         Container(
           padding: EdgeInsets.only(
@@ -79,8 +78,15 @@ class LoginForm extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: primaryColor,
                     ),
+                    errorText: _loginFailed ? 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' : null,
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: primaryColor))),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'กรุณาใส่อีเมลหรือเบอร์โทรศัพท์ของคุณ';
+                  }
+                  return null;
+                },
                 controller: emailController,
               ),
               SizedBox(height: size.height * 0.01,),
@@ -94,6 +100,12 @@ class LoginForm extends StatelessWidget {
                     ),
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: primaryColor))),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'กรุณาใส่รหัสผ่าน';
+                  }
+                  return null;
+                },
                 controller: passwordController,
                 obscureText: true,
               ),
@@ -116,9 +128,11 @@ class LoginForm extends StatelessWidget {
               ),
               SizedBox(height: size.height * 0.07,),
                GestureDetector(
-              onTap: () {
-                save();
-              },
+                 onTap: () {
+                   if (_formKey.currentState.validate()) {
+                     save();
+                   }
+                 },
                  child: Container(
                    padding: EdgeInsets.only(
                      left: 10,
@@ -206,6 +220,7 @@ class LoginForm extends StatelessWidget {
       ],
 
 
+    ),
     );
   }
 }

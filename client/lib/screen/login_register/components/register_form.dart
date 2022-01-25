@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:se_app2/constants.dart';
-import 'package:se_app2/screen/home/home.dart';
 import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 
-class RegisterForm extends StatelessWidget {
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key key}) : super(key: key);
+
+  @override
+  _RegisterFormState createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
+  GlobalKey<FormState> _formKey = GlobalKey();
+
+  var _registerFailed = false;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -35,11 +45,15 @@ class RegisterForm extends StatelessWidget {
         );
       }
       else {
+        setState((){
+          _registerFailed = true;
+        });
         print('failure');
       }
     }
-
-    return Stack(
+    return Form(
+      key: _formKey,
+      child: Stack(
       children: <Widget>[
         Container(
           padding: const EdgeInsets.only(
@@ -62,6 +76,7 @@ class RegisterForm extends StatelessWidget {
               ),
               SizedBox(height: size.height * 0.02,),
               TextFormField(
+                key: Key(emailController.toString()), // <- Magic!
                 decoration: InputDecoration(
                     labelText: 'อีเมล',
                     labelStyle: TextStyle(
@@ -69,9 +84,16 @@ class RegisterForm extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: primaryColor,
                     ),
+                    errorText: _registerFailed ? 'อีเมลนี้ได้ใช้ไปแล้ว' : null,
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: primaryColor))),
-                  controller: emailController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'กรุณาใส่อีเมลของคุณ';
+                  }
+                  return null;
+                },
+                controller: emailController,
               ),
               SizedBox(height: size.height * 0.01,),
               Row(
@@ -87,12 +109,18 @@ class RegisterForm extends StatelessWidget {
                             color: primaryColor,
                           ),
                         ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'กรุณาใส่ชื่อของคุณ';
+                        }
+                        return null;
+                      },
                       controller: realnameController,
                     ),
                   ),
                   SizedBox(width: size.width * 0.02,),
                   new Flexible(
-                    child: new TextField(
+                    child: new TextFormField(
                         decoration: InputDecoration(
                           labelText: 'นามสกุล',
                           labelStyle: TextStyle(
@@ -101,6 +129,12 @@ class RegisterForm extends StatelessWidget {
                             color: primaryColor,
                           ),
                         ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'กรุณาใส่นามสกุลของคุณ';
+                        }
+                        return null;
+                      },
                       controller: surnameController,
                     ),
                   ),
@@ -119,6 +153,12 @@ class RegisterForm extends StatelessWidget {
                     // hintStyle: ,
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: primaryColor))),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'กรุณาใส่หมายเลขโทรศัพท์ของคุณ';
+                  }
+                  return null;
+                },
                 controller: phoneController,
               ),
               SizedBox(height: size.height * 0.01,),
@@ -132,13 +172,21 @@ class RegisterForm extends StatelessWidget {
                     ),
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: primaryColor))),
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.length < 6) {
+                    return 'รหัสผ่านต้องมีตัวอักษร 6 ตัวขึ้นไป';
+                  }
+                  return null;
+                },
                 controller: passwordController,
                 obscureText: true,
               ),
               SizedBox(height: size.height * 0.02,),
               GestureDetector(
                 onTap: () {
-                save();
+                  if (_formKey.currentState.validate()) {
+                    save();
+                  }
                 },
                 child: Container(
                   padding: const EdgeInsets.only(
@@ -184,6 +232,7 @@ class RegisterForm extends StatelessWidget {
       ],
 
 
+    ),
     );
   }
 }
