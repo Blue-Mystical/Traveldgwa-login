@@ -15,12 +15,12 @@ class _LoginFormState extends State<LoginForm>  {
 
   var _loginFailed = false;
 
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
 
     Future save() async {
       var res = await http.post("http://10.0.2.2:8080/signin",

@@ -15,15 +15,15 @@ class _RegisterFormState extends State<RegisterForm> {
 
   var _registerFailed = false;
 
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController realnameController = TextEditingController();
+  TextEditingController surnameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    TextEditingController emailController = TextEditingController();
-    TextEditingController phoneController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController realnameController = TextEditingController();
-    TextEditingController surnameController = TextEditingController();
 
     Future save() async {
       var res = await http.post("http://10.0.2.2:8080/signup",
